@@ -51,54 +51,58 @@ export default function GitNestHomepage() {
             </div>
 
             {/* Navbar */}
-            <header className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 backdrop-blur-xl bg-[#06070a]/80">
-                <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-                    <div className="flex items-center gap-3 cursor-pointer select-none">
-                        <div className="w-11 h-11 rounded-2xl bg-white flex items-center justify-center overflow-hidden shadow-2xl shadow-emerald-500/20 border border-white/10 p-1">
-                            <img
-                                src="./logo.png"
-                                alt="GitNest Logo"
-                                className="w-full h-full object-contain"
-                            />
-                        </div>
+            <header className="fixed top-0 left-0 right-0 z-50 border-b border-zinc-200/20 dark:border-white/5 backdrop-blur-xl bg-white/80 dark:bg-[#06070a]/80 text-zinc-900 dark:text-white transition-colors">
+            <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div className="flex items-center gap-3 cursor-pointer select-none">
+            <div className="w-11 h-11 rounded-2xl bg-white flex items-center justify-center overflow-hidden shadow-2xl shadow-emerald-500/20 border border-white/10 p-1">
+                <img
+                    src="./logo.png"
+                    alt="GitNest Logo"
+                    className="w-full h-full object-contain"
+                />
+            </div>
 
-                        <div>
-                            <h1 className="text-xl font-black tracking-tight">
-                                Git<span className="text-emerald-400">Nest</span>
-                            </h1>
-                            <p className="text-[10px] text-zinc-500 tracking-[0.25em] uppercase">
-                                Collaborative Development
-                            </p>
-                        </div>
-                    </div>
+            <div>
+                <h1 className="text-xl font-black tracking-tight">
+                    Git<span className="text-emerald-400">Nest</span>
+                </h1>
+                <p className="text-[10px] text-zinc-500 tracking-[0.25em] uppercase">
+                    Collaborative Development
+                </p>
+            </div>
+        </div>
 
-                    <nav className="hidden md:flex items-center gap-8 text-sm text-zinc-400">
-                        <a href="#features" className="hover:text-white transition-colors">
-                            Features
-                        </a>
-                        <a href="#workflow" className="hover:text-white transition-colors">
-                            Workflow
-                        </a>
-                        <a href="#contributors" className="hover:text-white transition-colors">
-                            Open Source
-                        </a>
-                        <a href="#contributors" className="hover:text-white transition-colors">
-                            Contributors
-                        </a>
-                    </nav>
+        <nav className="hidden md:flex items-center gap-8 text-sm text-zinc-400 dark:text-zinc-400">
+            <a href="#features" className="hover:text-zinc-900 dark:hover:text-white transition-colors">
+                Features
+            </a>
+            <a href="#workflow" className="hover:text-zinc-900 dark:hover:text-white transition-colors">
+                Workflow
+            </a>
+            <a href="#contributors" className="hover:text-zinc-900 dark:hover:text-white transition-colors">
+                Open Source
+            </a>
+            <a href="#contributors" className="hover:text-zinc-900 dark:hover:text-white transition-colors">
+                Contributors
+            </a>
+        </nav>
 
-                    <div className="flex items-center gap-3">
-                        <button className="hidden sm:flex px-4 py-2 rounded-xl border border-white/10 bg-white/[0.03] text-sm text-zinc-300 hover:bg-white/[0.06] transition-all">
-                            Documentation
-                        </button>
+        <div className="flex items-center gap-3">
+            <button className="px-4 py-2 rounded-xl border border-zinc-200 dark:border-white/10 bg-zinc-50 dark:bg-white/[0.03] text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-white/[0.06] transition-all flex items-center gap-2">
+                <span>🤠</span> Light Mode
+            </button>
 
-                        <button className="px-5 py-2 rounded-xl bg-emerald-400 text-black font-semibold text-sm hover:scale-[1.02] transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-2">
-                            Start Contributing
-                            <ArrowRight className="w-4 h-4" />
-                        </button>
-                    </div>
-                </div>
-            </header>
+            <button className="hidden sm:flex px-4 py-2 rounded-xl border border-zinc-200 dark:border-white/10 bg-zinc-50 dark:bg-white/[0.03] text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-white/[0.06] transition-all">
+                Documentation
+            </button>
+
+            <button className="px-5 py-2 rounded-xl bg-emerald-400 text-black font-semibold text-sm hover:scale-[1.02] transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-2">
+                Start Contributing
+                <ArrowRight className="w-4 h-4" />
+            </button>
+        </div>
+    </div>
+</header>
 
             {/* Hero */}
             <section className="relative">
