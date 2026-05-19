@@ -1,6 +1,9 @@
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
+html{
+  scroll-behavior: smooth;
+}
 
 @layer base {
   body {
@@ -9,9 +12,25 @@
   
   html.dark body {
     @apply bg-zinc-950 text-white;
+    
   }
 }
 
 :root {
   color-scheme: light dark;
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(1.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in {
+  animation: slide-in 0.2s ease-out both;
 }

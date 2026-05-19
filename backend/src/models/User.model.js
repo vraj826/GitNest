@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema(
       required: [true, 'Please add a username'],
       unique: true,
       trim: true,
+      lowercase: true,
     },
     email: {
       type: String,
@@ -17,6 +18,7 @@ const userSchema = new mongoose.Schema(
         /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
         'Please add a valid email',
       ],
+      lowercase: true,
     },
     password: {
       type: String,
@@ -40,6 +42,8 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: '',
     },
+    followers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   },
   { timestamps: true }
 );
