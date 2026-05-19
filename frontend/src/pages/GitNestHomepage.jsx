@@ -47,7 +47,7 @@
         return (
             <div className="min-h-screen bg-[#06070a] text-white overflow-hidden">
                 {/* Background Effects */}
-                <div className="absolute inset-0 -z-10">
+                <div className="min-h-screen bg-white dark:bg-[#06070a] text-zinc-900 dark:text-white overflow-hidden">
                     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-emerald-500/10 blur-[120px] rounded-full" />
                     <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-cyan-500/5 blur-[120px] rounded-full" />
                 </div>
