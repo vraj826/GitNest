@@ -15,10 +15,16 @@ import {
 } from "lucide-react";
 import { Link } from 'react-router-dom';
 import logo from "../assets/logo.png";
-import "../App.css"
+import "../App.css";
 
 export default function GitNestHomepage() {
-    const [activeLink, setActiveLink] = useState("#features");
+    const [activeLink, setActiveLink] = useState(() => {
+        if (typeof window !== "undefined" && window.location.hash) {
+            return window.location.hash;
+        }
+
+        return "#home";
+    });
     const { isDarkMode, toggleTheme } = useThemeStore();
 
 
@@ -49,9 +55,9 @@ export default function GitNestHomepage() {
             {/* BACKGROUND */}
             <div className="absolute inset-0 -z-10 overflow-hidden">
 
-                <div className="absolute top-[-200px] left-1/2 -translate-x-1/2 w-[900px] h-[900px] rounded-full bg-[radial-gradient(circle,rgba(0,220,130,0.12),transparent_60%)] blur-3xl" />
+                <div className="absolute -top-50 left-1/2 -translate-x-1/2 w-225 h-[900px] rounded-full bg-[radial-gradient(circle,rgba(0,220,130,0.12),transparent_60%)] blur-3xl" />
 
-                <div className="absolute top-[20%] right-[-10%] w-[500px] h-[500px] rounded-full bg-cyan-400/10 blur-3xl" />
+                <div className="absolute top-[20%] right-[-10%] w-[500px] h-125 rounded-full bg-cyan-400/10 blur-3xl" />
 
                 <div className="absolute inset-0 opacity-[0.04]"
                     style={{
@@ -118,6 +124,8 @@ export default function GitNestHomepage() {
                         {/* PREMIUM TOGGLE */}
                         <button
                             onClick={toggleTheme}
+                            aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
+                            aria-pressed={isDarkMode}
                             className="relative w-[90px] h-12 rounded-full bg-white dark:bg-[#11151c] border border-zinc-200 dark:border-white/10 shadow-inner flex items-center px-1"
                         >
                             <div
@@ -140,7 +148,7 @@ export default function GitNestHomepage() {
 
                         <Link
                             to="/register"
-                            className="group px-5 rounded-2xl bg-gradient-to-r from-[#00dc82] via-[#2be4da] to-[#4fd1ff] text-black font-bold shadow-[0_10px_40px_rgba(0,220,130,0.35)] hover:-translate-x transition-all duration-300 flex items-center gap-2"
+                            className="group px-5 rounded-2xl bg-gradient-to-r from-[#00dc82] via-[#2be4da] to-[#4fd1ff] text-black font-bold shadow-[0_10px_40px_rgba(0,220,130,0.35)] hover:-translate-x-1 transition-all duration-300 flex items-center gap-2"
                         >
                             Start Contributing
 
@@ -189,7 +197,7 @@ export default function GitNestHomepage() {
                         </h1>
 
                         {/* DESCRIPTION */}
-                        <p className="text-[16px] leading-7 text-zinc-1000 dark:text-zinc-400 max-w-2xl mb-5 mt-2">
+                        <p className="text-[16px] leading-7 text-zinc-950 dark:text-zinc-400 max-w-2xl mb-5 mt-2">
                             GitNest is a full-featured GitHub-inspired platform built with the MERN stack. Create repositories, browse code, manage issues, review pull requests, and collaborate — all in one open-source developer ecosystem.
                         </p>
 
@@ -198,14 +206,14 @@ export default function GitNestHomepage() {
 
                             <Link
                                 to="/login"
-                                className="group px-6 py-3 rounded-4xl bg-gradient-to-r from-[#00dc82] to-[#36e4da] text-black font-bold shadow-[0_15px_45px_rgba(0,220,130,0.30)] hover:-translate-y-1 transition-all flex items-center gap-3"
+                                className="group px-6 py-3 rounded-3xl bg-gradient-to-r from-[#00dc82] to-[#36e4da] text-black font-bold shadow-[0_15px_45px_rgba(0,220,130,0.30)] hover:-translate-y-1 transition-all flex items-center gap-3"
                             >
                                 Explore Repositories
 
                                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                             </Link>
 
-                            <button className="px-8 py-3 rounded-4xl border border-zinc-200 dark:border-white/10 bg-white/70 dark:bg-white/[0.03] backdrop-blur-xl text-zinc-700 dark:text-zinc-200 hover:shadow-xl transition-all flex items-center gap-3">
+                            <button className="px-8 py-3 rounded-3xl border border-zinc-200 dark:border-white/10 bg-white/70 dark:bg-white/[0.03] backdrop-blur-xl text-zinc-700 dark:text-zinc-200 hover:shadow-xl transition-all flex items-center gap-3">
 
                                 <Layers3 className="w-5 h-5" />
 
@@ -242,7 +250,7 @@ export default function GitNestHomepage() {
                                 </div>
 
                                 <span className="text-zinc-700 dark:text-zinc-300 font-medium">
-                                    AI <br />Work flows
+                                    AI <br />Workflows
                                 </span>
                             </div>
 
@@ -381,7 +389,7 @@ export default function GitNestHomepage() {
                 {/* MARQUEE */}
                 <div className="relative mt-24 overflow-hidden border-y border-zinc-200 dark:border-white/5 bg-white/50 dark:bg-white/[0.02] backdrop-blur-xl">
 
-                    <div className="flex whitespace-nowrap animate-[marquee_30s_linear_infinite] py-6">
+                    <div className="flex whitespace-nowrap animate-marquee py-6">
 
                         {[...marqueeItems, ...marqueeItems].map((item, i) => (
                             <div
@@ -747,10 +755,10 @@ export default function GitNestHomepage() {
                     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[220px] bg-gradient-to-r from-[#00dc82]/10 via-[#4fd1ff]/10 to-[#d9f99d]/10 blur-3xl rounded-full" />
 
                     {/* LEFT GLOW */}
-                    <div className="absolute left-[-80px] bottom-0 w-[240px] h-[240px] bg-[#4fd1ff]/10 blur-3xl rounded-full" />
+                    <div className="absolute left-[-80px] bottom-0 w-[240px] h-60 bg-[#4fd1ff]/10 blur-3xl rounded-full" />
 
                     {/* RIGHT GLOW */}
-                    <div className="absolute right-[-80px] top-0 w-[240px] h-[240px] bg-[#00dc82]/10 blur-3xl rounded-full" />
+                    <div className="absolute right-[-80px] top-0 w-[240px] h-60 bg-[#00dc82]/10 blur-3xl rounded-full" />
                 </div>
 
                 <div className="relative z-10 max-w-7xl mx-auto px-6">
