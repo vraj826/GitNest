@@ -45,7 +45,7 @@ export const createRepository = asyncHandler(async (req, res, next)=> {
     sendSuccess(res, 201, repository, 'Repository created successfully');
 });
 
-export const getRepository = asyncHandler(async (req, resizeBy, next) => {
+export const getRepository = asyncHandler(async (req, res, next) => {
     const { username, reponame } = req.params;
 
     const repository = await Repository.findOne({ name: reponame})
