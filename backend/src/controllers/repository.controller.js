@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import Repository from '../models/Repository.model.js';
 import asyncHandler from '../utils/asyncHandler.js';
 import AppError from '../utils/AppError.js';
@@ -49,7 +50,7 @@ export const createRepository = asyncHandler(async (req, res, next)=> {
     sendSuccess(res, 201, repository, 'Repository created successfully');
 });
 
-export const getRepository = asyncHandler(async (req, resizeBy, next) => {
+export const getRepository = asyncHandler(async (req, res, next) => {
     const { username, reponame } = req.params;
 
     const repository = await Repository.findOne({ name: reponame})
@@ -66,7 +67,7 @@ export const getRepository = asyncHandler(async (req, resizeBy, next) => {
         return next(new AppError('Repository not found', 404));
     }
 
-    sendSuccess(resizeBy, 200, repository);
+    sendSuccess(res, 200, repository);
 });
 
 export const getUserRepositories = asyncHandler(async (req, res, next) => {
@@ -141,19 +142,12 @@ export const starRepository = asyncHandler(async(req, res, next) => {
         return next(new AppError('Repository not found', 404));
     }
 
-    const alreadyStarred = repository.stars.includes(req.user.id);
+    const result = await Repository.updateOne(
+        { _id: repository._id, stars: { $ne: req.user.id } },
+        { $addToSet: { stars: req.user.id } }
+    );
 
-    if (alreadyStarred) {
-        repository.stars = repository.stars.filter(
-            (id) => id.toString() !== req.user.id
-        );
-    } else {
-        repository.stars.push(req.user.id);
-    }
-
-    await repository.save();
-
-    if (!alreadyStarred) {
+    if (result.modifiedCount > 0) {
         try {
             await logActivity({
                 actor: req.user.id,
@@ -168,11 +162,8 @@ export const starRepository = asyncHandler(async(req, res, next) => {
         }
     }
 
-    const message = alreadyStarred
-    ? 'Repository unstarred successfully'
-    : 'Repository starred successfully';
-
-    sendSuccess(res, 200, { stars: repository.stars.length }, message);
+    const updated = await Repository.findById(repository._id);
+    sendSuccess(res, 200, { stars: updated.stars.length }, 'Repository starred successfully');
 });
 
 export const forkRepository = asyncHandler(async (req, res, next) => {
@@ -188,29 +179,51 @@ export const forkRepository = asyncHandler(async (req, res, next) => {
         return next(new AppError('You cannot fork your own repository', 404));
     }
 
-    const alreadyForked = await Repository.findOne({
-        name: reponame,
-        owner: req.user.id,
-        forkedFrom: original._id,
-    });
+    const session = await mongoose.startSession();
+    let forked;
+    try {
+        session.startTransaction();
 
-    if(alreadyForked) {
-        return next(new AppError('You have already forked this repository', 400));
+        const existing = await Repository.findOne({
+            name: reponame,
+            owner: req.user.id,
+            forkedFrom: original._id,
+        });
+
+        if (existing) {
+            await session.abortTransaction();
+            return next(new AppError('You have already forked this repository', 400));
+        }
+
+        [forked] = await Repository.create([{
+            name: original.name,
+            owner: req.user.id,
+            description: original.description,
+            visibility: 'public',
+            language: original.language,
+            topics: original.topics,
+            defaultBranch: original.defaultBranch,
+            forkedFrom: original._id,
+        }], { session });
+
+        await Repository.findByIdAndUpdate(
+            original._id,
+            { $addToSet: { forks: forked._id } },
+            { session }
+        );
+
+        await session.commitTransaction();
+    } catch (error) {
+        if (session.inTransaction()) {
+            await session.abortTransaction();
+        }
+        if (error.code === 11000) {
+            return next(new AppError('You have already forked this repository', 400));
+        }
+        return next(new AppError('Fork operation failed', 500));
+    } finally {
+        session.endSession();
     }
-
-    const forked = await Repository.create({
-    name: original.name,
-    owner: req.user.id,
-    description: original.description,
-    visibility: 'public',
-    language: original.language,
-    topics: original.topics,
-    defaultBranch: original.defaultBranch,
-    forkedFrom: original._id,
-    });
-
-    original.forks.push(forked._id);
-    await original.save();
 
     sendSuccess(res, 201, forked, 'Repository forked successfully');
 });

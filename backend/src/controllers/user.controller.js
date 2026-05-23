@@ -43,11 +43,50 @@ export const followUser = asyncHandler(async (req, res, next) => {
   if (!target) return next(new AppError('User not found', 404));
   if (target._id.equals(req.user._id)) return next(new AppError('You cannot follow yourself', 400));
 
-  const alreadyFollowing = target.followers.some((id) => id.equals(req.user._id));
-  if (alreadyFollowing) return next(new AppError('Already following this user', 400));
+  const session = await mongoose.startSession();
+  let followed = false;
+  try {
+    session.startTransaction();
 
-  await User.findByIdAndUpdate(target._id, { $push: { followers: req.user._id } });
-  await User.findByIdAndUpdate(req.user._id, { $push: { following: target._id } });
+    const result = await User.updateOne(
+      { _id: target._id, followers: { $ne: req.user._id } },
+      { $addToSet: { followers: req.user._id } },
+      { session }
+    );
+
+    if (result.modifiedCount > 0) {
+      await User.findByIdAndUpdate(
+        req.user._id,
+        { $addToSet: { following: target._id } },
+        { session }
+      );
+      followed = true;
+    }
+
+    await session.commitTransaction();
+  } catch (error) {
+    if (session.inTransaction()) {
+      await session.abortTransaction();
+    }
+    return next(new AppError('Follow operation failed', 500));
+  } finally {
+    session.endSession();
+  }
+
+  if (followed) {
+    try {
+      await logActivity({
+        actor: req.user.id,
+        type: ACTIVITY_TYPES.USER_FOLLOWED,
+        targetUser: target._id,
+        metadata: {
+          targetUsername: req.params.username.toLowerCase(),
+        },
+      });
+    } catch {
+      // Prevent activity logging failures from blocking follow
+    }
+  }
 
   sendSuccess(res, 200, null, 'Followed successfully');
 });
@@ -62,8 +101,50 @@ export const unfollowUser = asyncHandler(async (req, res, next) => {
   if (!target) return next(new AppError('User not found', 404));
   if (target._id.equals(req.user._id)) return next(new AppError('You cannot unfollow yourself', 400));
 
-  await User.findByIdAndUpdate(target._id, { $pull: { followers: req.user._id } });
-  await User.findByIdAndUpdate(req.user._id, { $pull: { following: target._id } });
+  const session = await mongoose.startSession();
+  let unfollowed = false;
+  try {
+    session.startTransaction();
+
+    const result = await User.updateOne(
+      { _id: target._id, followers: req.user._id },
+      { $pull: { followers: req.user._id } },
+      { session }
+    );
+
+    if (result.modifiedCount > 0) {
+      await User.findByIdAndUpdate(
+        req.user._id,
+        { $pull: { following: target._id } },
+        { session }
+      );
+      unfollowed = true;
+    }
+
+    await session.commitTransaction();
+  } catch (error) {
+    if (session.inTransaction()) {
+      await session.abortTransaction();
+    }
+    return next(new AppError('Unfollow operation failed', 500));
+  } finally {
+    session.endSession();
+  }
+
+  if (unfollowed) {
+    try {
+      await logActivity({
+        actor: req.user.id,
+        type: ACTIVITY_TYPES.USER_UNFOLLOWED,
+        targetUser: target._id,
+        metadata: {
+          targetUsername: req.params.username.toLowerCase(),
+        },
+      });
+    } catch {
+      // Prevent activity logging failures from blocking unfollow
+    }
+  }
 
   sendSuccess(res, 200, null, 'Unfollowed successfully');
 });
