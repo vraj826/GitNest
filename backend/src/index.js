@@ -17,7 +17,6 @@ import errorHandler from './middleware/errorHandler.js';
 import { requestIdMiddleware, attachRequestIdToResponse } from './middleware/requestId.js';
 import repositoryRoutes from './routes/repository.routes.js';
 import activityRoutes from './routes/activity.routes.js';
-import gitRoutes from './routes/git.routes.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -28,7 +27,6 @@ app.use(cors({
   credentials: true,
 }));
 
-// Middleware
 app.use(express.json());
 app.use(mongoSanitize());
 app.use(requestIdMiddleware);
@@ -42,10 +40,8 @@ app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/repositories', repositoryRoutes);
 app.use('/api/v1/activities', activityRoutes);
-app.use('/api/v1/git', gitRoutes);
 
 app.use((req, res, next) => {
-
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404, ERROR_CODES.NOT_FOUND));
 });
 
