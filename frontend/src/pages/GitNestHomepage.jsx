@@ -469,7 +469,7 @@ export default function GitNestHomepage() {
             {/* FEATURES */}
             <section
                 id="features"
-                className="relative py-32 overflow-hidden border-t border-zinc-200 dark:border-white/5 bg-[#f7faf9] dark:bg-[#080b11]"
+                className="relative py-32 overflow-hidden border-t border-zinc-200 dark:border-white/5  bg-[#f7faf9] dark:bg-[#050816]"
             >
 
                 {/* BACKGROUND DECOR */}
@@ -479,7 +479,7 @@ export default function GitNestHomepage() {
                         className="absolute inset-0"
                         style={{
                             backgroundImage:
-                                "radial-gradient(circle at 20% 18%, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.45) 14%, rgba(255,255,255,0.08) 30%, rgba(255,255,255,0) 58%), linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.12) 24%, rgba(255,255,255,0) 52%)",
+                                "radial-gradient(circle at 20% 18%, rgba(0,220,130,0.10) 0%, rgba(0,220,130,0.04) 20%, transparent 58%), linear-gradient(135deg, rgba(79,209,255,0.06) 0%, transparent 52%)",
                         }}
                     />
 
@@ -603,7 +603,7 @@ export default function GitNestHomepage() {
                                 className={`group relative overflow-hidden rounded-[34px] border border-white/60 dark:border-white/5 bg-gradient-to-br ${feature.bg} ${feature.darkBg} backdrop-blur-xl p-8 shadow-[0_10px_40px_rgba(15,23,42,0.05)] hover:-translate-y-2 hover:shadow-[0_20px_60px_rgba(15,23,42,0.12)] transition-all duration-500`}
                             >
 
-                                <div className="absolute inset-0 bg-gradient-to-br from-white/55 via-white/15 to-transparent dark:from-white/6 dark:via-white/0 pointer-events-none" />
+                                <div className="absolute inset-0 bg-gradient-to-br from-white/55 via-white/15 to-transparent dark:from-black dark:via-white/5  pointer-events-none" />
 
                                 {/* TOP GLOW */}
                                 <div
@@ -891,12 +891,12 @@ export default function GitNestHomepage() {
                             </div>
 
                             {/* DESCRIPTION */}
-                            <p className="text-[15px] leading-8 text-[#64748b] max-w-sm mb-8">
+                            <p className="text-[17px] leading-9 text-[#64748b] dark:text-zinc-400 max-w-sm mb-8">
                                 A modern collaborative development platform inspired by GitHub and built for open source communities worldwide.
                             </p>
 
                             {/* COPYRIGHT */}
-                            <p className="text-[15px] text-[#7c8aa5] leading-7">
+                            <p className="text-[15px] text-[#64748b] dark:text-zinc-400 leading-7">
                                 © 2026 GitNest. Built for open-source collaboration.
                             </p>
                         </div>
@@ -908,7 +908,7 @@ export default function GitNestHomepage() {
                                 Platform
                             </h4>
 
-                            <div className="space-y-3">
+                            <div className="space-y-5 text-[#64748b] dark:text-zinc-400">
 
                                 {[
                                     "Repositories",
@@ -919,7 +919,7 @@ export default function GitNestHomepage() {
                                     <a
                                         key={item}
                                         href="#"
-                                        className="group flex items-center gap-3 text-[17px] text-[#475569] hover:text-[#00b86b] transition-all duration-300"
+                                        className="group flex items-center gap-3 text-[17px] text-[#64748b] dark:text-zinc-400 hover:text-[#00b86b] transition-all duration-300"
                                     >
 
                                         <div className="w-2 h-2 rounded-full bg-[#00c97b] group-hover:scale-150 transition-transform" />
@@ -949,7 +949,7 @@ export default function GitNestHomepage() {
                                     <a
                                         key={item}
                                         href="#"
-                                        className="group flex items-center gap-3 text-[17px] text-[#475569] hover:text-[#00b86b] transition-all duration-300"
+                                        className="group flex items-center gap-3 text-[17px] text-[#64748b] dark:text-zinc-400 hover:text-[#00b86b] transition-all duration-300"
                                     >
 
                                         <div className="w-2 h-2 rounded-full bg-[#00c97b] group-hover:scale-150 transition-transform" />
@@ -1003,9 +1003,8 @@ export default function GitNestHomepage() {
                                 ))}
                             </div>
 
+                        
                         </div>
-
-
                     </div>
                 </div>
             </footer>
