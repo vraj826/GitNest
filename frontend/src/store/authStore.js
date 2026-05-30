@@ -20,16 +20,6 @@ const extractErrorMessage = (error) => {
   return error?.message || "An error occurred";
 };
 
-const getFriendlyAuthError = (error, fallbackMessage) => {
-  const message = extractErrorMessage(error);
-
-  if (message && message !== "An error occurred") {
-    return message;
-  }
-
-  return fallbackMessage;
-};
-
 export const useAuthStore = create(
   persist(
     (set) => ({
@@ -52,19 +42,19 @@ export const useAuthStore = create(
             email,
             password,
           });
-
+          const userData = extractUserData(res);
           set({
             user: {
-              _id: res._id,
-              username: res.username,
-              email: res.email,
+              _id: userData._id,
+              username: userData.username,
+              email: userData.email,
             },
-            token: res.token,
+            token: userData.token,
             isAuthenticated: true,
             error: null,
           });
 
-          return res;
+          return userData;
         } catch (error) {
           set({
             error: extractErrorMessage(error),
@@ -87,19 +77,18 @@ export const useAuthStore = create(
 
         try {
           const res = await registerUser(userData);
-
+          const createdUser = extractUserData(res);
           set({
             user: {
-              _id: res._id,
-              username: res.username,
-              email: res.email,
+              _id: createdUser._id,
+              username: createdUser.username,
+              email: createdUser.email,
             },
-            token: res.token,
+            token: createdUser.token,
             isAuthenticated: true,
             error: null,
           });
-
-          return res;
+          return createdUser;
         } catch (error) {
           set({
             error: extractErrorMessage(error),
