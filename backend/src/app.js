@@ -21,6 +21,7 @@ import fileBrowserRoutes from './routes/fileBrowser.routes.js';
 import branchRoutes from './routes/branch.routes.js';
 import searchRoutes from './routes/search.routes.js';
 import codeIntelligenceRoutes from './routes/codeIntelligence.routes.js';
+import cloneRoutes from './routes/clone.routes.js';
 import errorHandler from './middleware/errorHandler.js';
 import AppError from './utils/AppError.js';
 import swaggerSpec from './config/swagger.js';
@@ -127,7 +128,8 @@ const createApp = () => {
   app.use('/api/v1/repositories', branchRoutes);
   app.use('/api/v1/repositories', codeIntelligenceRoutes);
   app.use('/api/v1/search', searchRoutes);
-  app.use("/api/v1/auth", githubAuthRoutes);
+  app.use('/api/v1/auth', githubAuthRoutes);
+  app.use('/api/v1/repositories', cloneRoutes);
   app.use((req, res, next) => {
     next(
       new AppError(
