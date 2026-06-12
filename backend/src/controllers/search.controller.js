@@ -6,6 +6,7 @@ import AppError from '../utils/AppError.js';
 import { sendPaginated } from '../utils/responseHandlers.js';
 import paginate, { buildPaginationMeta } from '../utils/paginate.js';
 import { sanitizeSearchQuery } from '../utils/sanitizeSearchQuery.js';
+import { searchFiles, searchCommits} from '../services/search.service.js';
 
 const SEARCH_TYPES = {
   USERS: 'users',
